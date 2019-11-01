@@ -6,7 +6,7 @@ int main()
 	{
 		for( int j = 20 ; j < 60 ; ++j)
 		{
-			printf("# \033[%d;%dm", i, j);
+			printf("#\033[%d;%dm", i, j);
 		}
 		printf("\n");
 	}
