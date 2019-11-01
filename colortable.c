@@ -15,11 +15,11 @@ int main()
 			printf(" # \033[%d;%dm", i, j);
 		}
 		
-		printf("# \033[%d;%dm",0,0);
+		printf("\033[%d;%dm",0,0);
 		printf("\n");
 	}
 
 
-	printf("# \033[%d;%dm",0,0);
+	printf("\033[%d;%dm",0,0);
 	return 0;
 }
