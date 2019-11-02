@@ -5,7 +5,7 @@ int main()
 	int margin = 1;
 	int textmin = 30-margin;
 	int textmax = 37+margin;
-	int backgroundmin = 41-margin;
+	int backgroundmin = 40-margin;
 	int backgroundmax = 48+margin;	
 	printf("   ");
 	for( int i = backgroundmin ; i <= backgroundmax ; ++i)
