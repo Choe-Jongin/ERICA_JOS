@@ -1,6 +1,10 @@
 #pragma once
 
 #include <string>
+#include <list>
+#include <vector>
+
+using namespace std;
 
 class Position
 {
@@ -33,19 +37,28 @@ class Position
 
 class Object
 {
-	public:
-
+public:
+	
+	bool isDelete;
+	
 	std::string type;
 	Position pos;
-		
+	
+	Object( const char * _type = "")
+	{
+		type.assign(_type);
+		isDelete = false;
+	}
 	Object(char * _type)
 	{
 		type.assign(_type);
+		isDelete = false;
 	}
 	Object(int _x, int _y, char * _type)
 	{
 		pos.SetXY(_x,_y);
 		type.assign(_type);
+		isDelete = false;
 	}
 	~Object(){}
 	virtual	void Update(){}

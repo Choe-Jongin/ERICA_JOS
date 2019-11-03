@@ -36,18 +36,18 @@ public:
 			for( int i = pos.x ; i < pos.x + width ; ++i)
         	        {
                	         	Draw(i,pos.y,"─");
-               	        	Draw(i,pos.y + height,"─");
+               	        	Draw(i,pos.y + height - 1,"─");
                		 }
 		
-	                for( int i = pos.y ; i < pos.y + height; ++i)
+	                for( int i = pos.y ; i < pos.y + height -1; ++i)
 	                {
 	                        Draw(pos.x,i,"│");
-	                        Draw(pos.x + width,i,"│");
+	                        Draw(pos.x + width -1,i,"│");
        		        }
        	         	Draw(pos.x, pos.y,"┌");
-       	      		Draw(pos.x + width, pos.y,"┐");
-       	         	Draw(pos.x,pos.y + height,"└");
-       	 	        Draw(pos.x + width, pos.y + height,"┘");
+       	      		Draw(pos.x + width-1, pos.y,"┐");
+       	         	Draw(pos.x,pos.y + height-1,"└");
+       	 	        Draw(pos.x + width-1, pos.y + height-1,"┘");
 		}
 		
 		if( text.size() > maxTextLen)
@@ -56,7 +56,11 @@ public:
 		for( int i = 0; i < height-2 ; ++i )
 		{
 			for( int j = 0 ; j < width-2 ; ++j )
-			Draw(pos.x + j + 1, pos.y + i + 1, text[i*j + j]); 
+			{
+				if( i*j >= text.size())
+					break;
+				Draw(pos.x + j + 1, pos.y + i + 1, text[i*j + j]);
+			}	
 		}
 
 	}

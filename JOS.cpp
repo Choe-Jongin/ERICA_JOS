@@ -1,5 +1,8 @@
 #include "JOS.h"
 #include "Box.h"
+#include "WindowManager.h"
+
+WindowManager WindowManager;		// singleton 패턴 적용 요망
 
 int main()
 {
@@ -10,6 +13,8 @@ int main()
 	tempBox.SetText("");
 
 	//System Init
+	WindowManager.Init();
+	WindowManager.windows.push_back( new Window("Desktop",0,0,SIZEX,SIZEY));
 	system("clear");
 	
 	for( int y = 0 ; y < SIZEY ; ++y )
@@ -28,7 +33,8 @@ int main()
 		//flush backbuffer
 		memset(g_backBuffer,0,sizeof(g_backBuffer));
 		system("clear");
-
+	
+		/*
 		for( int i = 0 ; i < SIZEX ; ++i)
 		{
 			Draw(i,0,"─");
@@ -45,6 +51,9 @@ int main()
 		Draw(0,SIZEY-1,"└");
 		Draw(SIZEX-1,SIZEY-1,"┘");
 		Draw(0,SIZEY,"\0");
+		*/
+
+		WindowManager.Update();
 
 		//do something in this frame
 		if(Kbhit() == true)
@@ -67,6 +76,7 @@ int main()
 		tempBox.pos.y += 1;
 
 		//render
+		WindowManager.Render();
 		tempBox.Render();
 		for( int i = 0 ; i < SIZEY ; ++i)
 		{

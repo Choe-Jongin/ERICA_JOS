@@ -7,10 +7,12 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+
 #define SIZEX 160
 #define SIZEY 45
 
 using namespace std;
+
 
 char  g_backBuffer[SIZEY+1][SIZEX+1][4];
 
