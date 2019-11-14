@@ -2,17 +2,19 @@
 #include "WindowManager.h"
 #include "Desktop.h"
 
+char g_backBuffer[SIZEY+1][SIZEX+1][4] = {0};
 WindowManager windowManager;		// singleton 패턴 적용 요망
+JOS_SYSTEM JOS;				// singleton 패턴 적용 요망, 운영체제 관리자 역활을 함
+
 int main()
 {
-	char g_backBuffer[SIZEY+1][SIZEX+1][4] = {0};
 	bool _mainLoop = true;
-	int _frame = 0;
 	
 	Box tempBox(12,3,true,1,1);
 	tempBox.SetText("");
 
 	//System Init
+	JOS.Init();
 	windowManager.Init();
 	windowManager.AddWindow( new Desktop());
 	
@@ -34,43 +36,32 @@ int main()
 		//flush backbuffer
 		memset(g_backBuffer,0,sizeof(g_backBuffer));
 		system("clear");
+		JOS.SetTextBgColor(30,47);
+		++JOS.frame;
 
 		//do something in this frame
 		windowManager.Update();
 		if(Kbhit() == true)
 			_mainLoop = false;
 
-		++_frame;
-		
-		int _tempframe = _frame;
-		char _strframe[11];
-		for( int i = 0 ; i < 10 ; ++i )
-		{
-			_strframe[9-i] = '0' + _tempframe%10;
-			_tempframe/=10;
-
-			Draw(SIZEX/2+5-i,SIZEY/2,_strframe[9-i]);
-		}
-		_strframe[10] = '\0';
-		tempBox.SetText(_strframe);
-		tempBox.SetX(SIZEX/2);
-		tempBox.pos.y += 1;
-
 		//render
 		windowManager.Render();
-		tempBox.Render();
 
 		for( int i = 0 ; i < SIZEY ; ++i)
 		{
+			JOS.SetDefaultColor();
 			for(int j = 0 ; j <= SIZEX-1 ; ++j)
 				g_backBuffer[i][j][0] == 0 ? printf(" ") : printf("%s",g_backBuffer[i][j]);
 		
-			printf("\n");
+			printf("\033[%d;%dm\n", 0, 0);
 		}
-		
+	
+		if( _mainLoop == false )
+			break;		
 		//waiting
 		sleep(1);
 	}
+	printf("\033[%d;%dm", 0, 0);
 	
 	cout<<"JOS IS END"<<endl;
 	return 0;

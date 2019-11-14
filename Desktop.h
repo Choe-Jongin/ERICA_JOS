@@ -6,6 +6,7 @@
 class Desktop : public Window
 {
 public:
+	Box titleBar;
 	Desktop();
 	~Desktop();
 

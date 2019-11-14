@@ -10,7 +10,7 @@ public:
 	int halign;	// 0: top, 1: center, 2: bottom
 	bool showFrame;
 	
-	std::string text;
+	string text;
 	int maxTextLen;
 
 	//_w:넓이, _h:높이, _sh:테두리 출력 유무, _wall:글자 가로 정렬, _h:글자 세로 정렬
@@ -21,6 +21,10 @@ public:
 	void SetMaxTextLen(int _mtl)
 	{	
 		maxTextLen = _mtl;
+	}
+	void SetText( string  _text )
+	{
+		text.assign(_text);
 	}
 	void SetText( const char * _text )
 	{

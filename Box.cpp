@@ -23,7 +23,6 @@ void Box::Render()
 {
 	if( showFrame == true )
 	{
-
 		for( int i = pos.x ; i < pos.x + width ; ++i)
 		{
 			Draw(i,pos.y,"─");
@@ -46,11 +45,15 @@ void Box::Render()
 
 	for( int i = 0; i < height-2 ; ++i )
 	{
-		for( int j = 0 ; j < width-2 ; ++j )
+		int k = 0;
+	      	if( walign == 0) k = 0;
+		else if( walign == 1) k = (width-text.size())/2;
+		else if( walign == 2) k = width - text.size()-2;
+		for( int j = 0; j < width-2 ; ++j )
 		{
-			if( i*j >= text.size())
+			if( i*j + j >= text.size())
 				break;
-			Draw(pos.x + j + 1, pos.y + i + 1, text[i*j + j]);
+			Draw(pos.x + j + 1 + k, pos.y + i + 1, text[i*j + j]);
 		}
 	}
 

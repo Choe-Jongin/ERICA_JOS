@@ -7,12 +7,10 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-
 #define SIZEX 144 	// 최상위 윈도우 사이즈
 #define SIZEY 36	// 최상위 윈도우 사이즈
 
 using namespace std;
-
 
 extern char g_backBuffer[SIZEY+1][SIZEX+1][4];	// 후면버퍼
 
@@ -23,6 +21,67 @@ extern void Draw(int _x, int _y, const char * _c);
 extern void Draw(int _x, int _y, char * _c);
 extern void Draw(int _x, int _y, char _c);
 // 키보드 버퍼가 비어있지 않으면 1을 반환
-extern int Kbhit(void);
+extern int Kbhit();
 // 윈도우 있는 Kbhit 함수를 쓸수 없어서 구글에서 검색해서 사용함 출처 >> https://corsa.tistory.com/18 [CORSA]
 extern void Gotoxy(int x, int y);
+
+
+//시스템을 총괄하는 구조체, 딱 한번만 선언되어야 함
+class JOS_SYSTEM
+{
+public:
+	int textColor;	
+	int backColor;
+	int frame;
+	JOS_SYSTEM()
+	{
+		textColor = 30;
+		backColor = 47;
+		frame = 0;
+	}
+	~JOS_SYSTEM()
+	{
+
+	}
+	//초기화
+	void Init()
+	{
+		textColor = 30;
+                backColor = 47;
+		frame = 0;
+	}
+	//색 적용
+	void ApplyColor()
+	{
+		printf("\033[%d;%dm", backColor, textColor);
+	}
+	//글자색 설정
+	void SetTextColor(int _color)
+	{
+		textColor = _color;
+		ApplyColor();
+	}
+	//배경색 설정
+	void SetBackColor(int _color)
+	{
+		backColor = _color;
+		ApplyColor();
+	}
+	//글자,배경색 동시 설정
+	void SetTextBgColor(int _txt, int _bg)
+	{
+		textColor = _txt;
+		backColor = _bg;
+		ApplyColor();
+	}
+	//기본 색상으로 설정
+	void SetDefaultColor()
+	{
+		textColor = 30;
+                backColor = 47;
+		ApplyColor();
+
+	}
+
+};
+extern JOS_SYSTEM JOS;
