@@ -1,11 +1,11 @@
 #include "JOS.h"
-#include "Box.h"
 #include "WindowManager.h"
+#include "Desktop.h"
 
 WindowManager WindowManager;		// singleton 패턴 적용 요망
-
 int main()
 {
+	char g_backBuffer[SIZEY+1][SIZEX+1][4] = {0};
 	bool _mainLoop = true;
 	int _frame = 0;
 	
@@ -14,7 +14,9 @@ int main()
 
 	//System Init
 	WindowManager.Init();
-	WindowManager.windows.push_back( new Window("Desktop",0,0,SIZEX,SIZEY));
+//	WindowManager.AddWindow( new Window("Desktop",0,0,SIZEX,SIZEY));
+	WindowManager.AddWindow( new Desktop());
+	
 	system("clear");
 	
 	for( int y = 0 ; y < SIZEY ; ++y )
@@ -58,7 +60,8 @@ int main()
 		//do something in this frame
 		if(Kbhit() == true)
 			_mainLoop = false;
-		
+	
+
 		++_frame;
 		
 		int _tempframe = _frame;
@@ -92,4 +95,55 @@ int main()
 	
 	cout<<"JOS IS END"<<endl;
 	return 0;
+}
+//화면 밖을 벗어나는 좌표가 들어오면 값을 화면 안으로 수정하고 거짓을 반환
+bool SetValidPos(int * _x, int * _y)
+{
+	int x = *_x;
+	int y = *_y;
+	if( *_x < 0 )
+		*_x = 0;
+	if( *_x > SIZEX -1 )
+		*_x = SIZEX -1;
+	if( *_y < 0 )
+		*_y = 0;
+	if( *_y > SIZEY -1 )
+		*_y = SIZEY -1;
+	
+	return (x==*_x)&&(y==*_y);
+}
+// 화면에 특정 문자를 특정 위치에 출력, 조만간 텍셀이라는 구조체를 만들 예정
+void Draw(int _x, int _y, const char * _c)
+{
+	if( !SetValidPos(&_x,&_y) )
+		return ;
+        strcpy(g_backBuffer[_y][_x],_c);
+        g_backBuffer[_y][_x][3] = '\0';
+}
+void Draw(int _x, int _y, char * _c)
+{
+	if( !SetValidPos(&_x,&_y) )
+		return ;
+        strcpy(g_backBuffer[_y][_x],_c);
+        g_backBuffer[_y][_x][3] = '\0';
+}
+void Draw(int _x, int _y, char _c)
+{
+	if( !SetValidPos(&_x,&_y) )
+		return ;
+        char temp[4];
+        temp[0] = _c;
+        strcpy(g_backBuffer[_y][_x],temp);
+        g_backBuffer[_y][_x][1] = '\0';
+}
+// 키보드 버퍼가 비어있지 않으면 1을 반환
+int Kbhit(void)
+{
+  struct termios oldt, newt;
+  int ch;
+  int oldf;
+
+  tcgetattr(STDIN_FILENO, &oldt);
+  newt = oldt;
+  newt.c_lflag &= ~(ICANON | ECHO);
 }

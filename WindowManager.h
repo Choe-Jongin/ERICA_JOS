@@ -8,7 +8,6 @@ public:
 
 	list<Window*> windows;
 
-
 	WindowManager(){}
 	~WindowManager()
 	{

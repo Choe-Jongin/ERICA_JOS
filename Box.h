@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Object.h"
 
 class Box : public Object
@@ -14,61 +13,16 @@ public:
 	std::string text;
 	int maxTextLen;
 
-	Box(int _w = 10, int _h = 3, bool _sh = true,  int _wali = 0, int _hali = 0): Object("Box")
-	{
-		this->width = _w;
-		this->height = _h;
-		showFrame = _sh;	
-		maxTextLen = _w;
-		walign = _wali;
-		halign = _hali;
-	}
-	~Box(){}
-	void Update()
-	{
-
-	}
-	void Render()
-	{
-		if( showFrame == true )
-		{
-			
-			for( int i = pos.x ; i < pos.x + width ; ++i)
-        	        {
-               	         	Draw(i,pos.y,"─");
-               	        	Draw(i,pos.y + height - 1,"─");
-               		 }
-		
-	                for( int i = pos.y ; i < pos.y + height -1; ++i)
-	                {
-	                        Draw(pos.x,i,"│");
-	                        Draw(pos.x + width -1,i,"│");
-       		        }
-       	         	Draw(pos.x, pos.y,"┌");
-       	      		Draw(pos.x + width-1, pos.y,"┐");
-       	         	Draw(pos.x,pos.y + height-1,"└");
-       	 	        Draw(pos.x + width-1, pos.y + height-1,"┘");
-		}
-		
-		if( text.size() > maxTextLen)
-			text.erase(maxTextLen,text.size());
-
-		for( int i = 0; i < height-2 ; ++i )
-		{
-			for( int j = 0 ; j < width-2 ; ++j )
-			{
-				if( i*j >= text.size())
-					break;
-				Draw(pos.x + j + 1, pos.y + i + 1, text[i*j + j]);
-			}	
-		}
-
-	}
+	//_w:넓이, _h:높이, _sh:테두리 출력 유무, _wall:글자 가로 정렬, _h:글자 세로 정렬
+	Box(int _w = 10, int _h = 3, bool _sh = true,  int _wali = 0, int _hali = 0);
+	~Box();
+	void Update();
+	void Render();
 	void SetMaxTextLen(int _mtl)
 	{	
 		maxTextLen = _mtl;
 	}
-	void SetText( char * _text )
+	void SetText( const char * _text )
 	{
 		text.assign(_text);
 	}

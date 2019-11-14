@@ -1,5 +1,6 @@
 #pragma once
 #include "Box.h"
+
 class Window : public Object
 {
 	public :
@@ -12,7 +13,7 @@ class Window : public Object
 	int *height;
 	string name;
 
-	Window( char * _name, int _x = 0, int _y = 0, int _w=10, int _h =3):Object("Window")
+	Window( const char * _name = "Window", int _x = 0, int _y = 0, int _w=10, int _h =3):Object("Window")
 	{
 		name.assign(_name);
 		box.pos.x = _x;
@@ -40,18 +41,6 @@ class Window : public Object
 		width = &(box.width);
 		height = &(box.height);
 	}
-	void Update()
-	{
-
-		box.Update();
-	}
-	
-	void Render()
-	{
-	
-
-
-
-		box.Render();
-	}	
+	virtual	void Update(){}
+	virtual void Render(){}
 };
