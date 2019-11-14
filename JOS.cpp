@@ -2,7 +2,7 @@
 #include "WindowManager.h"
 #include "Desktop.h"
 
-WindowManager WindowManager;		// singleton 패턴 적용 요망
+WindowManager windowManager;		// singleton 패턴 적용 요망
 int main()
 {
 	char g_backBuffer[SIZEY+1][SIZEX+1][4] = {0};
@@ -13,9 +13,8 @@ int main()
 	tempBox.SetText("");
 
 	//System Init
-	WindowManager.Init();
-//	WindowManager.AddWindow( new Window("Desktop",0,0,SIZEX,SIZEY));
-	WindowManager.AddWindow( new Desktop());
+	windowManager.Init();
+	windowManager.AddWindow( new Desktop());
 	
 	system("clear");
 	
@@ -35,32 +34,11 @@ int main()
 		//flush backbuffer
 		memset(g_backBuffer,0,sizeof(g_backBuffer));
 		system("clear");
-	
-		/*
-		for( int i = 0 ; i < SIZEX ; ++i)
-		{
-			Draw(i,0,"─");
-			Draw(i,SIZEY-1,"─");
-		}
-
-		for( int i = 0 ; i < SIZEY ; ++i)
-		{
-			Draw(0,i,"│");
-			Draw(SIZEX-1,i,"│");
-		}
-		Draw(0,0,"┌");
-		Draw(SIZEX-1,0,"┐");
-		Draw(0,SIZEY-1,"└");
-		Draw(SIZEX-1,SIZEY-1,"┘");
-		Draw(0,SIZEY,"\0");
-		*/
-
-		WindowManager.Update();
 
 		//do something in this frame
+		windowManager.Update();
 		if(Kbhit() == true)
 			_mainLoop = false;
-	
 
 		++_frame;
 		
@@ -79,8 +57,9 @@ int main()
 		tempBox.pos.y += 1;
 
 		//render
-		WindowManager.Render();
+		windowManager.Render();
 		tempBox.Render();
+
 		for( int i = 0 ; i < SIZEY ; ++i)
 		{
 			for(int j = 0 ; j <= SIZEX-1 ; ++j)
@@ -95,22 +74,6 @@ int main()
 	
 	cout<<"JOS IS END"<<endl;
 	return 0;
-}
-//화면 밖을 벗어나는 좌표가 들어오면 값을 화면 안으로 수정하고 거짓을 반환
-bool SetValidPos(int * _x, int * _y)
-{
-	int x = *_x;
-	int y = *_y;
-	if( *_x < 0 )
-		*_x = 0;
-	if( *_x > SIZEX -1 )
-		*_x = SIZEX -1;
-	if( *_y < 0 )
-		*_y = 0;
-	if( *_y > SIZEY -1 )
-		*_y = SIZEY -1;
-	
-	return (x==*_x)&&(y==*_y);
 }
 // 화면에 특정 문자를 특정 위치에 출력, 조만간 텍셀이라는 구조체를 만들 예정
 void Draw(int _x, int _y, const char * _c)
@@ -137,7 +100,7 @@ void Draw(int _x, int _y, char _c)
         g_backBuffer[_y][_x][1] = '\0';
 }
 // 키보드 버퍼가 비어있지 않으면 1을 반환
-int Kbhit(void)
+int Kbhit()
 {
   struct termios oldt, newt;
   int ch;
@@ -158,4 +121,20 @@ int Kbhit(void)
     return 1;
   }
   return 0;
+}
+//화면 밖을 벗어나는 좌표가 들어오면 값을 화면 안으로 수정하고 거짓을 반환
+bool SetValidPos(int * _x, int * _y)
+{
+	int x = *_x;
+	int y = *_y;
+	if( *_x < 0 )
+		*_x = 0;
+	if( *_x > SIZEX -1 )
+		*_x = SIZEX -1;
+	if( *_y < 0 )
+		*_y = 0;
+	if( *_y > SIZEY -1 )
+		*_y = SIZEY -1;
+	
+	return (x==*_x)&&(y==*_y);
 }
