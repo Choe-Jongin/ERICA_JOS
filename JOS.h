@@ -34,11 +34,17 @@ public:
 	int textColor;	
 	int backColor;
 	int frame;
+	int mode;
+	int W,H; // 시스템 해상도
 	JOS_SYSTEM()
 	{
 		textColor = 30;
 		backColor = 47;
 		frame = 0;
+		mode = 0; 	// 0:normal, 1:test
+		
+		W = SIZEX;
+		H = SIZEY;
 	}
 	~JOS_SYSTEM()
 	{

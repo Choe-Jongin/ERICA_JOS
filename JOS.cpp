@@ -6,8 +6,26 @@ Texell g_backBuffer[SIZEY+1][SIZEX+1];
 WindowManager windowManager;		// singleton 패턴 적용 요망
 JOS_SYSTEM JOS;				// singleton 패턴 적용 요망, 운영체제 관리자 역활을 함
 
-int main()
+int main( int argc, char * argv[] )
 {
+	if( argc > 1 )
+	{
+		//테스트 모드로 실행
+		if( strcmp(argv[1],"test") == 0 )
+			JOS.mode = 1;	
+			
+	}else if( argc > 2 )
+	{
+		int size1 = strlen( argv[1] );
+		int size2 = strlen( argv[2] );
+		//해상도를 설정한 채 실행
+		if( size1 == 3 && size2 == 2 )
+		{
+			int h = (argv[1][0]-'0')*100 +  (argv[1][1]-'0')*10 + (argv[1][2]);
+			int w = 			(argv[2][1]-'0')*10 + (argv[2][2]);
+		}
+	}
+
 	bool _mainLoop = true;
 	
 	Box tempBox(12,3,true,1,1);
@@ -41,9 +59,12 @@ int main()
 
 		//do something in this frame
 		windowManager.Update();
-		if(Kbhit() == true)
-			_mainLoop = false;
-
+		while(Kbhit() == true)
+		{
+			char in = getchar();
+			if( in  == 'q' )
+				_mainLoop = false;
+		}
 		//render
 		windowManager.Render();
 
@@ -57,7 +78,14 @@ int main()
 		
 			printf("\033[%d;%dm\n", 0, 0);
 		}
-	
+		
+		if( JOS.mode == 1 )
+		{
+			for( int i = 0 ; i < JOS.W ; ++i)
+				std::cout<<'-';
+			std::cout<<endl<<"frame:"<<JOS.frame<<"  "<<"RunTime: 00:00:00"<<std::endl;
+		}
+
 		if( _mainLoop == false )
 			break;		
 		//waiting
