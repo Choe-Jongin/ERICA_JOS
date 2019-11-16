@@ -2,7 +2,7 @@
 #include "WindowManager.h"
 #include "Desktop.h"
 
-char g_backBuffer[SIZEY+1][SIZEX+1][4] = {0};
+Texell g_backBuffer[SIZEY+1][SIZEX+1];
 WindowManager windowManager;		// singleton 패턴 적용 요망
 JOS_SYSTEM JOS;				// singleton 패턴 적용 요망, 운영체제 관리자 역활을 함
 
@@ -51,7 +51,9 @@ int main()
 		{
 			JOS.SetDefaultColor();
 			for(int j = 0 ; j <= SIZEX-1 ; ++j)
-				g_backBuffer[i][j][0] == 0 ? printf(" ") : printf("%s",g_backBuffer[i][j]);
+				g_backBuffer[i][j].Print();
+				
+				//g_backBuffer[i][j][0] == 0 ? printf(" ") : printf("%s",g_backBuffer[i][j]);
 		
 			printf("\033[%d;%dm\n", 0, 0);
 		}
@@ -71,24 +73,27 @@ void Draw(int _x, int _y, const char * _c)
 {
 	if( !SetValidPos(&_x,&_y) )
 		return ;
-        strcpy(g_backBuffer[_y][_x],_c);
-        g_backBuffer[_y][_x][3] = '\0';
+	g_backBuffer[_y][_x].SetText(_c);	
+//        strcpy(g_backBuffer[_y][_x],_c);
+//       g_backBuffer[_y][_x][3] = '\0';
 }
 void Draw(int _x, int _y, char * _c)
 {
 	if( !SetValidPos(&_x,&_y) )
 		return ;
-        strcpy(g_backBuffer[_y][_x],_c);
-        g_backBuffer[_y][_x][3] = '\0';
+	g_backBuffer[_y][_x].SetText(_c);	
+//      strcpy(g_backBuffer[_y][_x],_c);
+//      g_backBuffer[_y][_x][3] = '\0';
 }
 void Draw(int _x, int _y, char _c)
 {
 	if( !SetValidPos(&_x,&_y) )
 		return ;
-        char temp[4];
-        temp[0] = _c;
-        strcpy(g_backBuffer[_y][_x],temp);
-        g_backBuffer[_y][_x][1] = '\0';
+	g_backBuffer[_y][_x].SetText(_c);	
+//        char temp[4];
+//        temp[0] = _c;
+//        strcpy(g_backBuffer[_y][_x],temp);
+//        g_backBuffer[_y][_x][1] = '\0';
 }
 // 키보드 버퍼가 비어있지 않으면 1을 반환
 int Kbhit()
