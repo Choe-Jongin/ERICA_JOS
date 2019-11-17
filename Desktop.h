@@ -7,6 +7,8 @@ class Desktop : public Window
 {
 public:
 	Box titleBar;
+	Box apps;
+
 	Desktop();
 	~Desktop();
 

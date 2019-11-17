@@ -45,5 +45,9 @@ public:
 		else
 			std::cout << text;
 	}
+	void Clear()
+	{
+		text[0] = text[1] = text[2] = text[3] = 0;
+	}
 
 };

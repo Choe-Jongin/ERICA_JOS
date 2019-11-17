@@ -94,10 +94,10 @@ public:
 	//해상도 변경  음수:범위 미만, 양수:범위초과, 0 정상변경
 	int SetResolution(int x, int y)
 	{
-		if( x < 30 ){
+		if( x < 100 ){
 			errorlist.push_back("x is so low");
 			return -1;
-		}else if( y < 10 ){
+		}else if( y < 15 ){
 			errorlist.push_back("y is so low");
 			return -1;
 		}else if( x > 192 ){
@@ -110,7 +110,6 @@ public:
 		
 		if( g_backBuffer != NULL )
 		{	
-			errorlist.push_back("backbuffer is null");
 			for( int i = 0 ; i < H ; ++i )
 				delete [] g_backBuffer[i];
 			delete [] g_backBuffer;
@@ -122,6 +121,12 @@ public:
 		
 		W = x;
 		H = y;
+	}
+	void InvalidRect(int left, int top, int right,int bottom)
+	{
+		for( int i = top ; i < bottom ; ++i )
+			for( int j = left ; j < right ; ++j )
+				g_backBuffer[i][j].Clear();
 	}
 
 };

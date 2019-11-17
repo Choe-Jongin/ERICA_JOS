@@ -41,19 +41,21 @@ void Box::Render()
 	}
 
 	if( text.size() > maxTextLen)
-		text.erase(maxTextLen,text.size());
-
+		text.erase(maxTextLen,text.size()-text.size());
+	
 	for( int i = 0; i < height-2 ; ++i )
 	{
-		int k = 0;
+		int k = 0;		//가로 정렬용 변수
 	      	if( walign == 0) k = 0;
-		else if( walign == 1) k = (width-text.size())/2;
-		else if( walign == 2) k = width - text.size()-2;
-		for( int j = 0; j < width-2 ; ++j )
+		else if( walign == 1) k = (width-text.size()%width)/2;
+		else if( walign == 2) k = width - text.size()%width-2;
+
+		
+		for( int j = 0; j < width && i<=line ; ++j )
 		{
-			if( i*j + j >= text.size())
+			if( i*width + j >= text.size())
 				break;
-			Draw(pos.x + j + 1 + k, pos.y + i + 1, text[i*j + j]);
+			Draw(pos.x+1 + j + k*(line==i), pos.y+1 + i, text[i*width + j]);
 		}
 	}
 

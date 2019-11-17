@@ -11,6 +11,7 @@ public:
 	bool showFrame;
 	
 	string text;
+	int line;
 	int maxTextLen;
 
 	//_w:넓이, _h:높이, _sh:테두리 출력 유무, _wall:글자 가로 정렬, _h:글자 세로 정렬
@@ -25,10 +26,12 @@ public:
 	void SetText( string  _text )
 	{
 		text.assign(_text);
+		line = text.size()/width;
 	}
 	void SetText( const char * _text )
 	{
 		text.assign(_text);
+		line = text.size()/width;
 	}
 	bool SetAlign( int _w = 1, int _h = 1)
 	{

@@ -10,6 +10,19 @@ int main( int argc, char * argv[] )
 {
 	JOS.SetResolution( SIZEX, SIZEY );
 
+	if( argc > 1 )
+	{
+		//테스트 모드로 실행
+		if( strcmp(argv[1],"test") == 0 )
+		{
+			JOS.mode = 1;	
+			--argc;
+			for( int i = 1 ; i <= argc ; ++i )
+			{
+				argv[i] = argv[i+1];
+			}
+		}
+	}
 
 	if( argc > 2 )
 	{
@@ -18,16 +31,13 @@ int main( int argc, char * argv[] )
 		//해상도를 설정한 채 실행
 		if( size1 == 3 && size2 == 2 )
 		{
-			int h = (argv[1][0]-'0')*100 +  (argv[1][1]-'0')*10 + (argv[1][2]-'0');
-			int w = 			(argv[2][0]-'0')*10 + (argv[2][1]-'0');
-			JOS.SetResolution( h, w );
+			int w = (argv[1][0]-'0')*100 +  (argv[1][1]-'0')*10 + (argv[1][2]-'0');
+			int h = 			(argv[2][0]-'0')*10 + (argv[2][1]-'0');
+			if( w > 192 || h < 15 || h > 54 )
+				JOS.errorlist.push_back("해상도 범위 이상");
+			else 
+				JOS.SetResolution( w, h );
 		}
-	}
-	else if( argc > 1 )
-	{
-		//테스트 모드로 실행
-		if( strcmp(argv[1],"test") == 0 )
-			JOS.mode = 1;	
 	}
 	
 	bool _mainLoop = true;
@@ -46,7 +56,7 @@ int main( int argc, char * argv[] )
 	while( _mainLoop )
 	{	
 		//flush backbuffer
-		//memset(g_backBuffer,0,sizeof(g_backBuffer));
+		JOS.InvalidRect(0,0,JOS.W,JOS.H);
 		JOS.SetTextBgColor(30,47);
 		++JOS.frame;
 
@@ -75,13 +85,14 @@ int main( int argc, char * argv[] )
 			for( int i = 0 ; i < JOS.W ; ++i)
 				std::cout<<'-';
 			cout<<endl<<"frame:"<<JOS.frame<<"  "<<"RunTime: 00:00:00"<<endl;
-			cout<<"ErrorMessage:"<<endl;
+			cout<<"ErrorMessage:";
 			for( auto it = JOS.errorlist.begin() ; it != JOS.errorlist.end() ; ++it )
 			{
 				string s = *it;
 				cout<<s.c_str()<<", ";
 			}
 			JOS.errorlist.clear();
+			cout<<endl;
 		}
 
 		if( _mainLoop == false )
