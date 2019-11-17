@@ -10,24 +10,26 @@ int main( int argc, char * argv[] )
 {
 	JOS.SetResolution( SIZEX, SIZEY );
 
-	if( argc > 1 )
-	{
-		//테스트 모드로 실행
-		if( strcmp(argv[1],"test") == 0 )
-			JOS.mode = 1;	
-			
-	}else if( argc > 2 )
+
+	if( argc > 2 )
 	{
 		int size1 = strlen( argv[1] );
 		int size2 = strlen( argv[2] );
 		//해상도를 설정한 채 실행
 		if( size1 == 3 && size2 == 2 )
 		{
-			int h = (argv[1][0]-'0')*100 +  (argv[1][1]-'0')*10 + (argv[1][2]);
-			int w = 			(argv[2][1]-'0')*10 + (argv[2][2]);
+			int h = (argv[1][0]-'0')*100 +  (argv[1][1]-'0')*10 + (argv[1][2]-'0');
+			int w = 			(argv[2][0]-'0')*10 + (argv[2][1]-'0');
 			JOS.SetResolution( h, w );
 		}
 	}
+	else if( argc > 1 )
+	{
+		//테스트 모드로 실행
+		if( strcmp(argv[1],"test") == 0 )
+			JOS.mode = 1;	
+	}
+	
 	bool _mainLoop = true;
 	
 	Box tempBox(12,3,true,1,1);
@@ -45,7 +47,6 @@ int main( int argc, char * argv[] )
 	{	
 		//flush backbuffer
 		//memset(g_backBuffer,0,sizeof(g_backBuffer));
-		system("clear");
 		JOS.SetTextBgColor(30,47);
 		++JOS.frame;
 
@@ -74,7 +75,7 @@ int main( int argc, char * argv[] )
 			for( int i = 0 ; i < JOS.W ; ++i)
 				std::cout<<'-';
 			cout<<endl<<"frame:"<<JOS.frame<<"  "<<"RunTime: 00:00:00"<<endl;
-			cout<<"ErrorMessage:";
+			cout<<"ErrorMessage:"<<endl;
 			for( auto it = JOS.errorlist.begin() ; it != JOS.errorlist.end() ; ++it )
 			{
 				string s = *it;
@@ -87,6 +88,8 @@ int main( int argc, char * argv[] )
 			break;		
 		//waiting
 		sleep(1);
+		system("clear");
+		
 	}
 	printf("\033[%d;%dm", 0, 0);
 	

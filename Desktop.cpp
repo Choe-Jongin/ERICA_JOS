@@ -1,10 +1,10 @@
 #include "JOS.h"
 #include "Desktop.h"
 
-Desktop::Desktop() : Window( "Desktop", 0, 0, SIZEX, SIZEY)
+Desktop::Desktop() : Window( "Desktop", 0, 0, JOS.W, JOS.H)
 {
-	titleBar = Box(SIZEX,3,true,1,1);
-	titleBar.SetMaxTextLen(SIZEX-2);
+	titleBar = Box(JOS.W,3,true,1,1);
+	titleBar.SetMaxTextLen(JOS.W-2);
 	titleBar.SetText( name );
 }
 Desktop::~Desktop()
