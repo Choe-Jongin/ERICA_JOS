@@ -2,8 +2,8 @@
 #include "Box.h"
 
 Box::Box(int _w, int _h, bool _sh, int _wali, int _hali)
+	:Object("Box")
 {
-	Object("Box");
 	this->width = _w;
 	this->height = _h;
 	showFrame = _sh;

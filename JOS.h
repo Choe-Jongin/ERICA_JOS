@@ -1,5 +1,6 @@
 #pragma once
 
+#include <list>
 #include <string.h>
 #include <cstring>
 #include <termios.h>
@@ -13,7 +14,7 @@
 
 using namespace std;
 
-extern Texell g_backBuffer[SIZEY+1][SIZEX+1];	// 후면버퍼
+extern Texell **g_backBuffer;	// 후면버퍼
 
 //화면 밖을 벗어나는 좌표가 들어오면 값을 화면 안으로 수정하고 거짓을 반환
 extern bool SetValidPos(int * _x, int * _y);
@@ -36,6 +37,7 @@ public:
 	int frame;
 	int mode;
 	int W,H; // 시스템 해상도
+	list<string> errorlist;
 	JOS_SYSTEM()
 	{
 		textColor = 30;
@@ -88,6 +90,38 @@ public:
                 backColor = 47;
 		ApplyColor();
 
+	}
+	//해상도 변경  음수:범위 미만, 양수:범위초과, 0 정상변경
+	int SetResolution(int x, int y)
+	{
+		if( x < 30 ){
+			errorlist.push_back("x is so low");
+			return -1;
+		}else if( y < 10 ){
+			errorlist.push_back("y is so low");
+			return -1;
+		}else if( x > 192 ){
+			errorlist.push_back("x is so high");
+			return 1;
+		}else if( y > 54 ){
+			errorlist.push_back("y is so high");
+			return 1;
+		}
+		
+		if( g_backBuffer != NULL )
+		{	
+			errorlist.push_back("backbuffer is null");
+			for( int i = 0 ; i < H ; ++i )
+				delete [] g_backBuffer[i];
+			delete [] g_backBuffer;
+		}
+
+		g_backBuffer = new Texell*[y];
+		for( int i = 0 ; i < y ; ++i )
+			g_backBuffer[i] = new Texell[x];
+		
+		W = x;
+		H = y;
 	}
 
 };

@@ -2,12 +2,14 @@
 #include "WindowManager.h"
 #include "Desktop.h"
 
-Texell g_backBuffer[SIZEY+1][SIZEX+1];
+Texell **g_backBuffer = NULL;
 WindowManager windowManager;		// singleton 패턴 적용 요망
 JOS_SYSTEM JOS;				// singleton 패턴 적용 요망, 운영체제 관리자 역활을 함
 
 int main( int argc, char * argv[] )
 {
+	JOS.SetResolution( SIZEX, SIZEY );
+
 	if( argc > 1 )
 	{
 		//테스트 모드로 실행
@@ -23,9 +25,9 @@ int main( int argc, char * argv[] )
 		{
 			int h = (argv[1][0]-'0')*100 +  (argv[1][1]-'0')*10 + (argv[1][2]);
 			int w = 			(argv[2][1]-'0')*10 + (argv[2][2]);
+			JOS.SetResolution( h, w );
 		}
 	}
-
 	bool _mainLoop = true;
 	
 	Box tempBox(12,3,true,1,1);
@@ -37,22 +39,12 @@ int main( int argc, char * argv[] )
 	windowManager.AddWindow( new Desktop());
 	
 	system("clear");
-	
-	for( int y = 0 ; y < SIZEY ; ++y )
-	{
-		for( int x = 0 ; x < SIZEX ; ++x )
-		{
-			Draw(x,y," ");
-		}
-
-		Draw(SIZEX,y,"\n");
-	}
 
 	//Main Loop
 	while( _mainLoop )
 	{	
 		//flush backbuffer
-		memset(g_backBuffer,0,sizeof(g_backBuffer));
+		//memset(g_backBuffer,0,sizeof(g_backBuffer));
 		system("clear");
 		JOS.SetTextBgColor(30,47);
 		++JOS.frame;
@@ -68,13 +60,11 @@ int main( int argc, char * argv[] )
 		//render
 		windowManager.Render();
 
-		for( int i = 0 ; i < SIZEY ; ++i)
+		for( int i = 0 ; i < JOS.H ; ++i)
 		{
 			JOS.SetDefaultColor();
-			for(int j = 0 ; j <= SIZEX-1 ; ++j)
+			for(int j = 0 ; j < JOS.W ; ++j)
 				g_backBuffer[i][j].Print();
-				
-				//g_backBuffer[i][j][0] == 0 ? printf(" ") : printf("%s",g_backBuffer[i][j]);
 		
 			printf("\033[%d;%dm\n", 0, 0);
 		}
@@ -83,7 +73,14 @@ int main( int argc, char * argv[] )
 		{
 			for( int i = 0 ; i < JOS.W ; ++i)
 				std::cout<<'-';
-			std::cout<<endl<<"frame:"<<JOS.frame<<"  "<<"RunTime: 00:00:00"<<std::endl;
+			cout<<endl<<"frame:"<<JOS.frame<<"  "<<"RunTime: 00:00:00"<<endl;
+			cout<<"ErrorMessage:";
+			for( auto it = JOS.errorlist.begin() ; it != JOS.errorlist.end() ; ++it )
+			{
+				string s = *it;
+				cout<<s.c_str()<<", ";
+			}
+			JOS.errorlist.clear();
 		}
 
 		if( _mainLoop == false )
@@ -153,12 +150,12 @@ bool SetValidPos(int * _x, int * _y)
 	int y = *_y;
 	if( *_x < 0 )
 		*_x = 0;
-	if( *_x > SIZEX -1 )
-		*_x = SIZEX -1;
+	if( *_x > JOS.W -1 )
+		*_x = JOS.W -1;
 	if( *_y < 0 )
 		*_y = 0;
-	if( *_y > SIZEY -1 )
-		*_y = SIZEY -1;
+	if( *_y > JOS.H -1 )
+		*_y = JOS.H -1;
 	
 	return (x==*_x)&&(y==*_y);
 }
