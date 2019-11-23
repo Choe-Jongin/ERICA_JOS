@@ -20,7 +20,6 @@ Desktop::~Desktop()
 }
 void Desktop::Update()
 {
-	apps.walign = (apps.walign+1)%3;
 	apps.Update();
 	titleBar.Update();
 	box.Update();
