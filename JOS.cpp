@@ -73,7 +73,7 @@ int main( int argc, char * argv[] )
 
 		for( int i = 0 ; i < JOS.H ; ++i)
 		{
-			JOS.SetDefaultColor();
+		//	JOS.SetDefaultColor();
 			for(int j = 0 ; j < JOS.W ; ++j)
 				g_backBuffer[i][j].Print();
 		
@@ -113,26 +113,18 @@ void Draw(int _x, int _y, const char * _c)
 	if( !SetValidPos(&_x,&_y) )
 		return ;
 	g_backBuffer[_y][_x].SetText(_c);	
-//        strcpy(g_backBuffer[_y][_x],_c);
-//       g_backBuffer[_y][_x][3] = '\0';
-}
-void Draw(int _x, int _y, char * _c)
-{
-	if( !SetValidPos(&_x,&_y) )
-		return ;
-	g_backBuffer[_y][_x].SetText(_c);	
-//      strcpy(g_backBuffer[_y][_x],_c);
-//      g_backBuffer[_y][_x][3] = '\0';
 }
 void Draw(int _x, int _y, char _c)
 {
 	if( !SetValidPos(&_x,&_y) )
 		return ;
 	g_backBuffer[_y][_x].SetText(_c);	
-//        char temp[4];
-//        temp[0] = _c;
-//        strcpy(g_backBuffer[_y][_x],temp);
-//        g_backBuffer[_y][_x][1] = '\0';
+}
+void Draw(int _x, int _y, Texell texell)
+{
+	if( !SetValidPos(&_x,&_y) )
+                return ;
+        g_backBuffer[_y][_x] = texell;
 }
 // 키보드 버퍼가 비어있지 않으면 1을 반환
 int Kbhit()

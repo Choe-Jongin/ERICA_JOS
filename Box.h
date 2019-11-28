@@ -9,7 +9,8 @@ public:
 	int walign;	// 0: left, 1: mid, 2; right;
 	int halign;	// 0: top, 1: center, 2: bottom
 	bool showFrame;
-	
+	bool fill;
+
 	string text;
 	int line;
 	int maxTextLen;
@@ -18,7 +19,7 @@ public:
 	Box(int _w = 10, int _h = 3, bool _sh = true,  int _wali = 0, int _hali = 0);
 	~Box();
 	void Update();
-	void Render();
+	void Render( bool isColored = false , char _textcolor = 0, char _boxcolor = 0 );
 	void SetMaxTextLen(int _mtl)
 	{	
 		maxTextLen = _mtl;

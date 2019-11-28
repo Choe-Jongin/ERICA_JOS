@@ -1,5 +1,6 @@
 #include "JOS.h"
 #include "Box.h"
+#include "Texell.h"
 
 Box::Box(int _w, int _h, bool _sh, int _wali, int _hali)
 	:Object("Box")
@@ -10,6 +11,7 @@ Box::Box(int _w, int _h, bool _sh, int _wali, int _hali)
 	maxTextLen = _w;
 	walign = _wali;
 	halign = _hali;
+	fill = false;
 }
 Box::~Box()
 {
@@ -19,7 +21,7 @@ void Box::Update()
 {
 
 }
-void Box::Render()
+void Box::Render(bool isColored, char _textcolor, char _backcolor)
 {
 	if( showFrame == true )
 	{
@@ -40,6 +42,22 @@ void Box::Render()
 		Draw(pos.x + width-1, pos.y + height-1,"┘");
 	}
 
+	//배경 칠하기
+	if(fill)
+	{
+		for( int i = 0; i < height-2 ; ++i )
+		{
+			for( int j = 0; j < width-2 ; ++j )
+			{
+				if( isColored )
+					Draw(pos.x+1 + j, pos.y+1 + i, Texell("", _textcolor, _backcolor) );			
+				else
+					Draw(pos.x+1 + j, pos.y+1 + i, "" );			
+
+			}
+		}
+	}
+
 	if( text.size() > maxTextLen)
 		text.erase(maxTextLen,text.size()-text.size());
 	
@@ -55,7 +73,10 @@ void Box::Render()
 		{
 			if( i*width + j >= text.size())
 				break;
-			Draw(pos.x+1 + j + k*(line==i), pos.y+1 + i, text[i*width + j]);
+			if( isColored == true )
+				Draw(pos.x+1 + j + k*(line==i), pos.y+1 + i, Texell(text[i*width+j], _textcolor, _backcolor) );			
+			else
+				Draw(pos.x+1 + j + k*(line==i), pos.y+1 + i, text[i*width + j]);
 		}
 	}
 

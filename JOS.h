@@ -20,8 +20,8 @@ extern Texell **g_backBuffer;	// 후면버퍼
 extern bool SetValidPos(int * _x, int * _y);
 // 화면에 특정 문자를 특정 위치에 출력, 조만간 텍셀이라는 구조체를 만들 예정
 extern void Draw(int _x, int _y, const char * _c);
-extern void Draw(int _x, int _y, char * _c);
 extern void Draw(int _x, int _y, char _c);
+extern void Draw(int _x, int _y, Texell texell);
 // 키보드 버퍼가 비어있지 않으면 1을 반환
 extern int Kbhit();
 // 윈도우 있는 Kbhit 함수를 쓸수 없어서 구글에서 검색해서 사용함 출처 >> https://corsa.tistory.com/18 [CORSA]
@@ -32,8 +32,8 @@ extern void Gotoxy(int x, int y);
 class JOS_SYSTEM
 {
 public:
-	int textColor;	
-	int backColor;
+	char textColor;	
+	char backColor;
 	int frame;
 	int mode;
 	int W,H; // 시스템 해상도
@@ -67,18 +67,24 @@ public:
 	//글자색 설정
 	void SetTextColor(int _color)
 	{
+		if( textColor == _color )
+			return ;
 		textColor = _color;
 		ApplyColor();
 	}
 	//배경색 설정
 	void SetBackColor(int _color)
 	{
+		if( backColor == _color )
+			return ;
 		backColor = _color;
 		ApplyColor();
 	}
 	//글자,배경색 동시 설정
 	void SetTextBgColor(int _txt, int _bg)
 	{
+		if( textColor == _txt && backColor == _bg )
+			return ;
 		textColor = _txt;
 		backColor = _bg;
 		ApplyColor();
@@ -86,6 +92,8 @@ public:
 	//기본 색상으로 설정
 	void SetDefaultColor()
 	{
+		if( textColor == 30 && backColor == 47 )
+			return ;
 		textColor = 30;
                 backColor = 47;
 		ApplyColor();

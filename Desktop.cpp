@@ -7,6 +7,7 @@ Desktop::Desktop() : Window( "Desktop", 0, 0, JOS.W, JOS.H)
 	titleBar = Box(JOS.W,3,true,1,1);
 	titleBar.SetMaxTextLen(JOS.W-2);
 	titleBar.SetText( name );
+	titleBar.fill = true;
 
 	//프로그램 아이콘들을 담을 상자
 	apps = Box(JOS.W, 10, false, 1,0);
@@ -26,7 +27,7 @@ void Desktop::Update()
 }
 void Desktop::Render()
 {
-	apps.Render();
-	titleBar.Render();
+	apps.Render(true,31,47);
+	titleBar.Render(true, 30, 41);
 	box.Render();
 }
