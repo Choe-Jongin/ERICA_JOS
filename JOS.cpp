@@ -56,51 +56,57 @@ int main( int argc, char * argv[] )
 	while( _mainLoop )
 	{	
 		//flush backbuffer
-		JOS.InvalidRect(0,0,JOS.W,JOS.H);
-		JOS.SetTextBgColor(30,47);
-		++JOS.frame;
-
-		//do something in this frame
-		windowManager.Update();
+		JOS.UpdateTime();
+		
 		while(Kbhit() == true)
 		{
 			char in = getchar();
 			if( in  == 'q' )
 				_mainLoop = false;
 		}
-		//render
-		windowManager.Render();
+	
+		if( JOS.tickInFrame >= 1000000/FPS )
+		{
+			JOS.SetTextBgColor(30,47);
+			++JOS.frame;
+			JOS.tickInFrame -= 1000000/FPS;
+			
+			//do something in this frame
+			windowManager.Update();
+			
+			//render
+			JOS.InvalidRect(0,0,JOS.W,JOS.H);
+			windowManager.Render();
 
-		for( int i = 0 ; i < JOS.H ; ++i)
-		{
-		//	JOS.SetDefaultColor();
-			for(int j = 0 ; j < JOS.W ; ++j)
-				g_backBuffer[i][j].Print();
-		
-			printf("\033[%d;%dm\n", 0, 0);
-		}
-		
-		if( JOS.mode == 1 )
-		{
-			for( int i = 0 ; i < JOS.W ; ++i)
-				std::cout<<'-';
-			cout<<endl<<"frame:"<<JOS.frame<<"  "<<"RunTime: 00:00:00"<<endl;
-			cout<<"ErrorMessage:";
-			for( auto it = JOS.errorlist.begin() ; it != JOS.errorlist.end() ; ++it )
+			system("clear");
+			for( int i = 0 ; i < JOS.H ; ++i)
 			{
-				string s = *it;
-				cout<<s.c_str()<<", ";
+			//	JOS.SetDefaultColor();
+				for(int j = 0 ; j < JOS.W ; ++j)
+					g_backBuffer[i][j].Print();
+			
+				printf("\033[%d;%dm\n", 0, 0);
 			}
-			JOS.errorlist.clear();
-			cout<<endl;
-		}
+			
+			if( JOS.mode == 1 )
+			{
+				for( int i = 0 ; i < JOS.W ; ++i)
+					std::cout<<'-';
+				cout<<endl<<"frame:"<<JOS.frame<<"  "<<"RunTime: 00:00:00"<<endl;
+				cout<<"ErrorMessage:";
+				for( auto it = JOS.errorlist.begin() ; it != JOS.errorlist.end() ; ++it )
+				{
+					string s = *it;
+					cout<<s.c_str()<<", ";
+				}
+				JOS.errorlist.clear();
+				cout<<endl;
+			}
 
+			//waiting
+		}
 		if( _mainLoop == false )
 			break;		
-		//waiting
-		sleep(1);
-		system("clear");
-		
 	}
 	printf("\033[%d;%dm", 0, 0);
 	

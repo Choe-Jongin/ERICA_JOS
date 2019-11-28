@@ -6,11 +6,13 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <time.h>
 
 #include "Texell.h"
 
 #define SIZEX 144 	// 최상위 윈도우 사이즈
 #define SIZEY 36	// 최상위 윈도우 사이즈
+#define FPS 30		// 최대 FPS
 
 using namespace std;
 
@@ -37,9 +39,16 @@ public:
 	int frame;
 	int mode;
 	int W,H; // 시스템 해상도
+	
+	clock_t currenttime;
+	clock_t previoustime;
+	unsigned int tick;
+	unsigned int tickInFrame;
+
 	list<string> errorlist;
 	JOS_SYSTEM()
 	{
+		previoustime = clock();
 		textColor = 30;
 		backColor = 47;
 		frame = 0;
@@ -47,6 +56,10 @@ public:
 		
 		W = SIZEX;
 		H = SIZEY;
+		
+		currenttime = clock();
+		tick = currenttime - previoustime;
+		tickInFrame = 0;
 	}
 	~JOS_SYSTEM()
 	{
@@ -135,6 +148,13 @@ public:
 		for( int i = top ; i < bottom ; ++i )
 			for( int j = left ; j < right ; ++j )
 				g_backBuffer[i][j].Clear();
+	}
+	void UpdateTime()
+	{
+		currenttime = clock();
+                tick = currenttime-previoustime;
+                previoustime = currenttime;
+                tickInFrame += tick;
 	}
 
 };
