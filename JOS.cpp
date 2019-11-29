@@ -18,9 +18,7 @@ int main( int argc, char * argv[] )
 			JOS.mode = 1;	
 			--argc;
 			for( int i = 1 ; i <= argc ; ++i )
-			{
 				argv[i] = argv[i+1];
-			}
 		}
 	}
 
@@ -34,7 +32,7 @@ int main( int argc, char * argv[] )
 			int w = (argv[1][0]-'0')*100 +  (argv[1][1]-'0')*10 + (argv[1][2]-'0');
 			int h = 			(argv[2][0]-'0')*10 + (argv[2][1]-'0');
 			if( w > 192 || h < 15 || h > 54 )
-				JOS.errorlist.push_back("해상도 범위 이상");
+				JOS.errorlist.push_back(ERROR("해상도 범위 이상"));
 			else 
 				JOS.SetResolution( w, h );
 		}
@@ -65,11 +63,11 @@ int main( int argc, char * argv[] )
 				_mainLoop = false;
 		}
 	
-		if( JOS.tickInFrame >= 1000000/FPS )
+		if( JOS.tickInFrame >= ONESEC/FPS )
 		{
 			JOS.SetTextBgColor(30,47);
 			++JOS.frame;
-			JOS.tickInFrame -= 1000000/FPS;
+			JOS.tickInFrame -= ONESEC/FPS;
 			
 			//do something in this frame
 			windowManager.Update();
@@ -81,25 +79,27 @@ int main( int argc, char * argv[] )
 			system("clear");
 			for( int i = 0 ; i < JOS.H ; ++i)
 			{
-			//	JOS.SetDefaultColor();
+				JOS.SetDefaultColor();
 				for(int j = 0 ; j < JOS.W ; ++j)
 					g_backBuffer[i][j].Print();
-			
-				printf("\033[%d;%dm\n", 0, 0);
+				
+				cout<<"\033[0;0m"<<endl;	
 			}
 			
 			if( JOS.mode == 1 )
 			{
 				for( int i = 0 ; i < JOS.W ; ++i)
 					std::cout<<'-';
-				cout<<endl<<"frame:"<<JOS.frame<<"  "<<"RunTime: 00:00:00"<<endl;
+				cout<<endl<<"frame:"<<JOS.frame<<"  "<<"RunTime: "<<JOS.hour<<":"<<JOS.min<<":"<<JOS.sec<<endl;
 				cout<<"ErrorMessage:";
-				for( auto it = JOS.errorlist.begin() ; it != JOS.errorlist.end() ; ++it )
+				for( auto it = JOS.errorlist.begin() ; it != JOS.errorlist.end() ; )
 				{
-					string s = *it;
+					string s = it->message;
 					cout<<s.c_str()<<", ";
+					if( it->IsDelete(ONESEC/FPS) )
+						it= JOS.errorlist.erase(it);
+					else ++it;
 				}
-				JOS.errorlist.clear();
 				cout<<endl;
 			}
 

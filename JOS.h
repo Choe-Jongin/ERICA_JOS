@@ -13,7 +13,7 @@
 #define SIZEX 144 	// 최상위 윈도우 사이즈
 #define SIZEY 36	// 최상위 윈도우 사이즈
 #define FPS 30		// 최대 FPS
-
+#define ONESEC CLOCKS_PER_SEC	// 1초
 using namespace std;
 
 extern Texell **g_backBuffer;	// 후면버퍼
@@ -29,6 +29,24 @@ extern int Kbhit();
 // 윈도우 있는 Kbhit 함수를 쓸수 없어서 구글에서 검색해서 사용함 출처 >> https://corsa.tistory.com/18 [CORSA]
 extern void Gotoxy(int x, int y);
 
+class ERROR
+{
+public:
+	string message;
+	int showtime;
+	ERROR(string _msg, int _shtime = ONESEC )
+	{
+		message = _msg;
+		showtime = _shtime;
+	}
+	bool IsDelete( int _tick )
+	{
+		showtime -= _tick;
+		if( showtime <= 0 )
+			return true;
+		return false;
+	}
+};
 
 //시스템을 총괄하는 구조체, 딱 한번만 선언되어야 함
 class JOS_SYSTEM
@@ -44,8 +62,10 @@ public:
 	clock_t previoustime;
 	unsigned int tick;
 	unsigned int tickInFrame;
+	
+	unsigned int us, sec, min, hour;
 
-	list<string> errorlist;
+	list<ERROR> errorlist;
 	JOS_SYSTEM()
 	{
 		previoustime = clock();
@@ -60,6 +80,8 @@ public:
 		currenttime = clock();
 		tick = currenttime - previoustime;
 		tickInFrame = 0;
+
+		us = sec = min = hour = 0;
 	}
 	~JOS_SYSTEM()
 	{
@@ -116,16 +138,16 @@ public:
 	int SetResolution(int x, int y)
 	{
 		if( x < 100 ){
-			errorlist.push_back("x is so low");
+			errorlist.push_back(ERROR("x is so low"));
 			return -1;
 		}else if( y < 15 ){
-			errorlist.push_back("y is so low");
+			errorlist.push_back(ERROR("y is so low"));
 			return -1;
 		}else if( x > 192 ){
-			errorlist.push_back("x is so high");
+			errorlist.push_back(ERROR("x is so high"));
 			return 1;
 		}else if( y > 54 ){
-			errorlist.push_back("y is so high");
+			errorlist.push_back(ERROR("y is so high"));
 			return 1;
 		}
 		
@@ -155,6 +177,20 @@ public:
                 tick = currenttime-previoustime;
                 previoustime = currenttime;
                 tickInFrame += tick;
+		us += tick;
+		if( us >= ONESEC )
+		{
+			us -= ONESEC;
+			if( ++sec >= 60 )
+			{
+				sec -= 60;
+				if( ++min >= 60 )
+				{
+					min = 60;
+					++hour;
+				}
+			}
+		}
 	}
 
 };
