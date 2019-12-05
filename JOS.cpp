@@ -59,8 +59,7 @@ int main( int argc, char * argv[] )
 		while(Kbhit() == true)
 		{
 			char in = getchar();
-			if( in  == 'q' )
-				_mainLoop = false;
+			JOS.key.AddKey(in);
 		}
 	
 		if( JOS.tickInFrame >= ONESEC/FPS )
@@ -102,9 +101,13 @@ int main( int argc, char * argv[] )
 				}
 				cout<<endl;
 			}
-
+			JOS.key.Update();
 			//waiting
 		}
+
+		if( JOS.key.IsPress("qQ") )
+			_mainLoop = false;
+
 		if( _mainLoop == false )
 			break;		
 	}

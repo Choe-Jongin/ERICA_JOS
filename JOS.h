@@ -9,6 +9,7 @@
 #include <time.h>
 
 #include "Texell.h"
+#include "KeyProc.h"
 
 #define SIZEX 144 	// 최상위 윈도우 사이즈
 #define SIZEY 36	// 최상위 윈도우 사이즈
@@ -52,6 +53,9 @@ public:
 class JOS_SYSTEM
 {
 public:
+	
+	KeyProc key;
+	
 	char textColor;	
 	char backColor;
 	int frame;

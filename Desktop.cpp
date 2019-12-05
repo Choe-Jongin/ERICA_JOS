@@ -27,7 +27,7 @@ void Desktop::Update()
 }
 void Desktop::Render()
 {
-	apps.Render(true,31,47);
-	titleBar.Render(true, 30, 41);
+	apps.Render(true);
+	titleBar.Render(true);
 	box.Render();
 }
