@@ -35,7 +35,7 @@ class ERROR
 public:
 	string message;
 	int showtime;
-	ERROR(string _msg, int _shtime = ONESEC )
+	ERROR(string _msg, int _shtime = ONESEC * 3 )
 	{
 		message = _msg;
 		showtime = _shtime;
@@ -168,6 +168,9 @@ public:
 		
 		W = x;
 		H = y;
+		
+		//정상변경
+		return 0;
 	}
 	void InvalidRect(int left, int top, int right,int bottom)
 	{

@@ -33,8 +33,7 @@ int main( int argc, char * argv[] )
 			int h = 			(argv[2][0]-'0')*10 + (argv[2][1]-'0');
 			if( w > 192 || h < 15 || h > 54 )
 				JOS.errorlist.push_back(ERROR("해상도 범위 이상"));
-			else 
-				JOS.SetResolution( w, h );
+			JOS.SetResolution( w, h );
 		}
 	}
 	
